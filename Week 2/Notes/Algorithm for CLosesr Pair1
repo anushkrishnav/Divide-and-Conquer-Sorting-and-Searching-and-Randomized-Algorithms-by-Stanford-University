@@ -1,0 +1,48 @@
+Input : a set of P={pt1,pt2,....ptn} of n points in the plan (R^2)
+
+D(Pi,Pj)=Euclidean distance .
+Pi=(y1,y1),Pj=(x2,y2)
+D(Pi,Pj)=root((x1-x2)^2 + (y1-y2)^2 )
+
+Output : a pair p*,q* belongs to P of distinct points such that  d(p,q) has the smallest distance in the set P
+
+            Initial Observations.
+
+Assumption : All points have distinct x-coordinates and distinct y-coordinates.
+
+Brute Force takes n^2 Time.
+
+1-D version of closest Part :
+    Sort points (O(n log ((n)time)
+    Return closest pair of adjacent points (O(n)time)
+
+Goal:O(nlog(n)) time algo for 2-D version
+
+
+                High level Approach
+Step-1
+Sort and store the point in 2 variables 
+    Px (sorted w.r.t x coordinates)
+    Py (sorted w.r.t y coordinates)
+    [O(n log(n))time]
+
+Step-2
+Use Divide and Conquer.
+    1.Q= left half of P ,R=right half of P
+    2.(p1,q1)=closest pair(Qx,Qy)
+    3.(p2,q2)=closest pair(Rx,Ry)
+    4.(p3,q3)=closestsplitpair(Px,Py)
+    return best of "2","3","4".
+-----------------------------------------------------------------
+Key Idea : Lets ommit the best case that both our points are either in Q or R and focus on the unluck senario " a split situation".
+-----------------------------------------------------------------------------
+    revised algorithm
+    1.Q= left half of P ,R=right half of P
+    2.(p1,q1)=closest pair(Qx,Qy)
+    3.(p2,q2)=closest pair(Rx,Ry)
+    4.Let delta=min({d(p1,q1),d(p2,q2)})
+    5.(p3,p3)=closestsplitpair((Px,Py))
+    return (p1,q1),(pt2,q2),(p3,q3)
+
+xbar=biggest x-coordinates in Left [O(1) time]
+Let  Sy  =  points  of  P  with  x-coordinate  in Sorted  by  yLcoordinate   [O(n)time]
