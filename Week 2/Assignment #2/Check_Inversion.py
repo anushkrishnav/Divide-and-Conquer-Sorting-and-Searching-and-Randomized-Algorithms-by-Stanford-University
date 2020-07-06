@@ -1,6 +1,6 @@
 class InversionCalculator(object):
-    def __init__(self):
-        self._array = []
+    def __init__(self,arr):
+        self._array = arr
         self._inversions = 0
 
     @property
@@ -30,31 +30,27 @@ class InversionCalculator(object):
         mid = (len(array)) // 2
         first_half = self._sort(array[:mid])
         second_half = self._sort(array[mid:])
-        return self._merge(array, first_half, second_half)
+        return self._merge( first_half, second_half)
 
-    def _merge(self, array, first_half, second_half):
-        i, j, k = 0, 0, 0
+    def _merge(self, first_half, second_half):
+        array=[]
+        j, k = 0, 0
         while j < len(first_half) and k < len(second_half):
             if first_half[j] <= second_half[k]:
-                array[i] = first_half[j]
+                array.append(first_half[j])
                 j += 1
             else:
-                array[i] = second_half[k]
+                array.append(second_half[k])
                 k += 1
                 self._inversions += (len(first_half) - j)
-            i += 1
         while j < len(first_half):
-            array[i] = first_half[j]
+            array.append(first_half[j])
             j += 1
-            i += 1
         while k < len(second_half):
-            array[i] = second_half[k]
+            array.append(second_half[k])
             k += 1
-            i += 1
         return array
 
 if __name__ == '__main__':
-    calculator = InversionCalculator()
-    calculator.read_input("/home/anush/Documents/NeoAlgo/Python/other/a.txt")
-    calculator.merge_sort()
-    print(calculator.inversions)
+    calculator = InversionCalculator([[5,2],[1,4],[6,7]])
+    print(calculator.merge_sort())
