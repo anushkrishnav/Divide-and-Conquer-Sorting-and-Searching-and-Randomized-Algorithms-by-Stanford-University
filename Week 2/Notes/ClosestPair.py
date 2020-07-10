@@ -1,43 +1,50 @@
+import math
+class Points():
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
 class ClosestPair():
-    def __init__(self,P=[]):
+    def __init__(self,P):
         self.Points=P
-        self.Px=sorted(P, key=lambda x: x[0])
-        self.Py=sorted(P, key=lambda x: x[1])
-    def MergeSort(self,cons='x'):
-        array=self.Sort(self.Points,cons)
-        return array
-    def Sort(self,Points,cons):
-        if len(Points) <= 1:
-            return Points
-        med=len(Points)//2
-        left=self.Sort(Points[:med],cons)
-        right=self.Sort(Points[med:],cons)
-        return self.Merge(left,right,cons)
-                
-    def Merge(self,left,right,cons):
-        l=1
-        if cons=='x':
-            l=0
-        sorte=[]
-        i,j,=0,0
-        while i < len(left) and j<len(right):
-            if left[i][l] <= right[j][l]:
-                sorte.append(left[i])
-                i+=1
-            else:
-                sorte.append(right[j])
+    @staticmethod
+    def Distance(p1,p2):
+        return math.sqrt((p1.x-p2.y)*(p1.x-p2.y)+(p1.y-p2.x)*(p1.y-p2.x))
+    def BruteForce(self,P):
+        n=len(P)
+        minival=float('inf')
+        for i in range(n):
+            for j in range(i+1,n):
+                if self.Distance(self.Points[i],self.Points[j])<minival:
+                    minival=self.Distance(self.Points[i],self.Points[j])
+            return minival
+    def StripClosest(self,strip,size,d):
+        mini_val=d
+        strip.sort(key=lambda point:point.y)
+        for i in range(size):
+            j=i+1
+            while j<size and (strip[j].y-strip[i].y)<mini_val:
+                mini_val=self.Distance(strip[i],strip[j])
                 j+=1
-        while i < len(left):
-            sorte.append(left[i])
-            i += 1
-        while j < len(right):
-            sorte.append(right[j])
-            j += 1
-        return sorte 
-    def CountSplitPair(self):
-        pass
+        return mini_val
+    def ClosestUtil(self,P):
+        n=len(P)
+        if n<=3:
+            return self.BruteForce(P)
+        mid=n//2
+        midpt=P[mid]
+        dleft=self.ClosestUtil(P[:mid])
+        dright=self.ClosestUtil(P[mid:])
+        d=min(dleft,dright)
+        strip=[]
+        for i in range(n):
+            if abs(P[i].x-midpt.x)<d:
+                strip.append(P[i])
+        return min(d,self.StripClosest(strip,len(strip),d))
+    def closest(self):
+        P=self.Points
+        P.sort(key=lambda point:point.x)
+        return self.ClosestUtil(P)
 if __name__ == "__main__":
-    P=[[1,2],[7,9],[3,4],[5,6],[4,7]]
-    sort=ClosestPair(P)
-    print(sort.MergeSort())
-    sort.prin()
+    P=[Points(1,2),Points(7,9),Points(4,3),Points(5,6),Points(4,7)]
+    a=ClosestPair(P)
+    print(a.closest())
