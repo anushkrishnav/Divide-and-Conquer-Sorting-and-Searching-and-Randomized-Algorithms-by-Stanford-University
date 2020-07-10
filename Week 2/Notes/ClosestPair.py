@@ -6,6 +6,7 @@ class Points():
 class ClosestPair():
     def __init__(self,P):
         self.Points=P
+        self.pt=None
     @staticmethod
     def Distance(p1,p2):
         return math.sqrt((p1.x-p2.y)*(p1.x-p2.y)+(p1.y-p2.x)*(p1.y-p2.x))
@@ -16,6 +17,7 @@ class ClosestPair():
             for j in range(i+1,n):
                 if self.Distance(self.Points[i],self.Points[j])<minival:
                     minival=self.Distance(self.Points[i],self.Points[j])
+                    self.pt=((self.Points[i].x,self.Points[i].y),(self.Points[j].x,self.Points[j].y))
             return minival
     def StripClosest(self,strip,size,d):
         mini_val=d
@@ -44,7 +46,11 @@ class ClosestPair():
         P=self.Points
         P.sort(key=lambda point:point.x)
         return self.ClosestUtil(P)
+    def ClosestPoints(self):
+        distan=self.closest()
+        return self.pt
 if __name__ == "__main__":
-    P=[Points(1,2),Points(7,9),Points(4,3),Points(5,6),Points(4,7)]
+    P=[Points(1,2),Points(7,9),Points(4,9),Points(9,6),Points(5,4)]
     a=ClosestPair(P)
-    print(a.closest())
+    print("The closest pair of points is "+str(a.ClosestPoints()))
+    print("And the distance between them is " + str(a.closest())+" units")
